@@ -1,0 +1,419 @@
+{
+  "audit_metadata": {
+    "audit_name": "EduTrack Database Audit & Data Cleaning – Q3 2025",
+    "database": "EduTrack (Supabase Compatible)",
+    "table_audited": "enrollments",
+    "execution_date": "2025-11-18T17:57:14Z",
+    "status": "COMPLETED",
+    "phase": "Q1 → Q12 (Strict Sequential Execution)"
+  },
+  "data_quality_summary": {
+    "initial_enrollment_count": 17,
+    "final_enrollment_count": 16,
+    "net_change": -1,
+    "issues_identified": 4,
+    "issues_resolved": 4,
+    "data_integrity_status": "EXCELLENT"
+  },
+  "phase_1_diagnostic_queries": {
+    "Q1": {
+      "title": "Inscripciones en 'Intro to Python'",
+      "type": "SELECT",
+      "records_returned": 5,
+      "description": "List all enrollments for 'Intro to Python' course",
+      "records": [
+        {
+          "student_name": "Priya Sharma",
+          "student_email": "priya.sharma@student.edutrack.com",
+          "course_title": "Intro to Python",
+          "completion_percentage": 55,
+          "enrollment_date": "2025-01-10"
+        },
+        {
+          "student_name": "Marco Rossi",
+          "student_email": "marco.rossi@student.edutrack.com",
+          "course_title": "Intro to Python",
+          "completion_percentage": 88,
+          "enrollment_date": "2024-08-09"
+        },
+        {
+          "student_name": "James Miller",
+          "student_email": "james.miller@test.com",
+          "course_title": "Intro to Python",
+          "completion_percentage": 30,
+          "enrollment_date": "2024-05-22",
+          "note": "TEST ACCOUNT - Deleted in Q8"
+        },
+        {
+          "student_name": "Klaus Weber",
+          "student_email": "klaus.weber@student.edutrack.com",
+          "course_title": "Intro to Python",
+          "completion_percentage": 92,
+          "enrollment_date": "2024-03-12"
+        },
+        {
+          "student_name": "Emily Watson",
+          "student_email": "emily.watson@student.edutrack.com",
+          "course_title": "Intro to Python",
+          "completion_percentage": 85,
+          "enrollment_date": "2024-03-10"
+        }
+      ]
+    },
+    "Q2": {
+      "title": "Posibles abandonos (completion_percentage < 10%)",
+      "type": "SELECT",
+      "records_returned": 4,
+      "description": "Identify potential student dropouts with very low completion",
+      "critical_findings": [
+        "4 students at high risk of abandonment",
+        "Yuki Nakamura and Pierre Dubois have 0% completion (never started)",
+        "Lucia Fernandes shows abandonment across 2 courses"
+      ],
+      "records": [
+        {
+          "id": 10,
+          "student_name": "Yuki Nakamura",
+          "course_title": "UI/UX Fundamentals",
+          "completion_percentage": 0,
+          "category": "Design",
+          "enrollment_date": "2024-10-11"
+        },
+        {
+          "id": 11,
+          "student_name": "Pierre Dubois",
+          "course_title": "UI/UX Fundamentals",
+          "completion_percentage": 0,
+          "category": "Design",
+          "enrollment_date": "2024-11-05"
+        },
+        {
+          "id": 6,
+          "student_name": "Lucia Fernandes",
+          "course_title": "Digital Marketing 101",
+          "completion_percentage": 3,
+          "category": "Marketing",
+          "enrollment_date": "2024-07-01"
+        },
+        {
+          "id": 5,
+          "student_name": "Lucia Fernandes",
+          "course_title": "Web Design Basics",
+          "completion_percentage": 5,
+          "category": "Design",
+          "enrollment_date": "2024-06-20"
+        }
+      ]
+    },
+    "Q3": {
+      "title": "Inscripciones con instructor NULL",
+      "type": "SELECT",
+      "records_returned_before_q7": 2,
+      "records_returned_after_q7": 0,
+      "description": "Find all enrollments with NULL instructor value",
+      "data_quality_issue": "Pending instructor assignments",
+      "courses_affected": ["UI/UX Fundamentals"],
+      "records_before_correction": [
+        {
+          "id": 10,
+          "student_name": "Yuki Nakamura",
+          "course_title": "UI/UX Fundamentals",
+          "category": "Design",
+          "instructor": null
+        },
+        {
+          "id": 11,
+          "student_name": "Pierre Dubois",
+          "course_title": "UI/UX Fundamentals",
+          "category": "Design",
+          "instructor": null
+        }
+      ]
+    },
+    "Q4": {
+      "title": "Top 5 estudiantes con mayor completion sin aprobar",
+      "type": "SELECT",
+      "records_returned": 5,
+      "description": "Students closest to passing with highest engagement",
+      "records": [
+        {
+          "student_name": "Emily Watson",
+          "course_title": "Web Design Basics",
+          "completion_percentage": 60,
+          "passed": false
+        },
+        {
+          "student_name": "Priya Sharma",
+          "course_title": "Intro to Python",
+          "completion_percentage": 55,
+          "passed": false
+        },
+        {
+          "student_name": "Yuki Nakamura",
+          "course_title": "Data Analysis with SQL",
+          "completion_percentage": 45,
+          "passed": false
+        },
+        {
+          "student_name": "Emily Watson",
+          "course_title": "Advanced Python",
+          "completion_percentage": 40,
+          "passed": false
+        },
+        {
+          "student_name": "James Miller",
+          "course_title": "Intro to Python",
+          "completion_percentage": 30,
+          "passed": false,
+          "note": "TEST ACCOUNT - Deleted in Q8"
+        }
+      ]
+    },
+    "Q5": {
+      "title": "Inscripciones desde 2024-07-01",
+      "type": "SELECT",
+      "records_returned": 9,
+      "description": "Q3 2024 onwards - Recent enrollment trends",
+      "time_period": "2024-07-01 to 2025-03-05",
+      "records_summary": "9 recent enrollments showing growth in Q1-Q2 2025"
+    }
+  },
+  "phase_2_correction_operations": {
+    "Q6": {
+      "title": "INSERT - Registrar inscripción faltante",
+      "type": "INSERT",
+      "operation_status": "COMPLETED",
+      "records_affected": 1,
+      "total_before": 17,
+      "total_after": 18,
+      "inserted_record": {
+        "student_id": 3,
+        "student_name": "Lucia Fernandes",
+        "student_email": "lucia.fernandes@student.edutrack.com",
+        "course_id": 5,
+        "course_title": "Advanced Python",
+        "category": "Programming",
+        "enrollment_date": "2025-04-01",
+        "completion_percentage": 0,
+        "passed": false,
+        "monthly_fee_paid": 69.99,
+        "instructor": "Carlos Vega"
+      },
+      "reason": "Enrollment confirmed by email during system migration but never recorded in database"
+    },
+    "Q7": {
+      "title": "UPDATE - Asignar instructor por defecto",
+      "type": "UPDATE",
+      "operation_status": "COMPLETED",
+      "records_affected": 2,
+      "condition": "instructor IS NULL",
+      "new_value": "Pending assignment",
+      "records_updated": [
+        {
+          "id": 10,
+          "student_name": "Yuki Nakamura",
+          "course_title": "UI/UX Fundamentals",
+          "instructor_before": null,
+          "instructor_after": "Pending assignment"
+        },
+        {
+          "id": 11,
+          "student_name": "Pierre Dubois",
+          "course_title": "UI/UX Fundamentals",
+          "instructor_before": null,
+          "instructor_after": "Pending assignment"
+        }
+      ]
+    },
+    "Q8": {
+      "title": "DELETE - Eliminar cuentas de prueba",
+      "type": "DELETE",
+      "operation_status": "COMPLETED",
+      "deletion_criteria": "student_email LIKE '%@test.com'",
+      "records_deleted": 2,
+      "total_before": 18,
+      "total_after": 16,
+      "deleted_records": [
+        {
+          "id": 13,
+          "student_name": "James Miller",
+          "student_email": "james.miller@test.com",
+          "course_title": "Intro to Python",
+          "enrollment_date": "2024-05-22"
+        },
+        {
+          "id": 14,
+          "student_name": "Alex Chen",
+          "student_email": "alex.chen@test.com",
+          "course_title": "Web Design Basics",
+          "enrollment_date": "2024-06-30"
+        }
+      ]
+    }
+  },
+  "phase_3_aggregation_metrics": {
+    "Q9": {
+      "title": "Inscripciones totales por categoría",
+      "type": "AGGREGATE",
+      "grouping": "category",
+      "metrics": [
+        {
+          "category": "Programming",
+          "enrollment_count": 7,
+          "percentage_of_total": 43.75
+        },
+        {
+          "category": "Design",
+          "enrollment_count": 4,
+          "percentage_of_total": 25.0
+        },
+        {
+          "category": "Data",
+          "enrollment_count": 3,
+          "percentage_of_total": 18.75
+        },
+        {
+          "category": "Marketing",
+          "enrollment_count": 2,
+          "percentage_of_total": 12.5
+        }
+      ],
+      "total_enrollments": 16
+    },
+    "Q10": {
+      "title": "Promedio de completion_percentage por curso",
+      "type": "AGGREGATE",
+      "grouping": "course_title",
+      "rankings": "lowest_to_highest_avg_completion",
+      "metrics": [
+        {
+          "course_title": "UI/UX Fundamentals",
+          "category": "Design",
+          "total_enrollments": 2,
+          "avg_completion_percentage": 0.0,
+          "status": "CRITICAL"
+        },
+        {
+          "course_title": "Web Design Basics",
+          "category": "Design",
+          "total_enrollments": 2,
+          "avg_completion_percentage": 32.5
+        },
+        {
+          "course_title": "Digital Marketing 101",
+          "category": "Marketing",
+          "total_enrollments": 2,
+          "avg_completion_percentage": 36.5
+        },
+        {
+          "course_title": "Advanced Python",
+          "category": "Programming",
+          "total_enrollments": 3,
+          "avg_completion_percentage": 45.0
+        },
+        {
+          "course_title": "Data Analysis with SQL",
+          "category": "Data",
+          "total_enrollments": 3,
+          "avg_completion_percentage": 47.67
+        },
+        {
+          "course_title": "Intro to Python",
+          "category": "Programming",
+          "total_enrollments": 4,
+          "avg_completion_percentage": 80.0,
+          "status": "EXCELLENT"
+        }
+      ]
+    },
+    "Q11": {
+      "title": "Cursos con más de 3 inscripciones (HAVING)",
+      "type": "AGGREGATE",
+      "having_condition": "COUNT(*) > 3",
+      "records_returned": 1,
+      "metrics": [
+        {
+          "course_title": "Intro to Python",
+          "category": "Programming",
+          "enrollment_count": 4,
+          "avg_completion_percentage": 80.0,
+          "insights": "Only course exceeding 3 enrollments; highest completion rate"
+        }
+      ]
+    },
+    "Q12": {
+      "title": "Ingresos totales por categoría",
+      "type": "AGGREGATE",
+      "grouping": "category",
+      "metrics": [
+        {
+          "category": "Programming",
+          "total_enrollments": 7,
+          "total_revenue": 409.93,
+          "avg_revenue_per_enrollment": 58.56,
+          "percentage_of_total_revenue": 50.0
+        },
+        {
+          "category": "Data",
+          "total_enrollments": 3,
+          "total_revenue": 179.97,
+          "avg_revenue_per_enrollment": 59.99,
+          "percentage_of_total_revenue": 22.0,
+          "insight": "Highest revenue per enrollment"
+        },
+        {
+          "category": "Design",
+          "total_enrollments": 4,
+          "total_revenue": 169.96,
+          "avg_revenue_per_enrollment": 42.49,
+          "percentage_of_total_revenue": 20.75
+        },
+        {
+          "category": "Marketing",
+          "total_enrollments": 2,
+          "total_revenue": 59.98,
+          "avg_revenue_per_enrollment": 29.99,
+          "percentage_of_total_revenue": 7.32,
+          "insight": "Growth opportunity - lowest revenue category"
+        }
+      ],
+      "total_revenue": 819.84,
+      "avg_revenue_per_enrollment": 51.24
+    }
+  },
+  "data_integrity_checks": {
+    "null_instructors_after_q7": 0,
+    "test_accounts_remaining_after_q8": 0,
+    "invalid_completion_percentages": 0,
+    "negative_fees": 0,
+    "data_quality_status": "PASSED_ALL_CHECKS"
+  },
+  "recommendations": {
+    "immediate_actions": [
+      "Contact 4 students at risk of abandonment (Q2 findings)",
+      "Investigate 'UI/UX Fundamentals' course (0% completion average)",
+      "Assign instructors to 2 pending enrollments (Q7 updated records)"
+    ],
+    "short_term_improvements": [
+      "Implement early warning system for student engagement < 20%",
+      "Review and enhance Design category course content",
+      "Conduct peer review of 'Intro to Python' as model course"
+    ],
+    "strategic_initiatives": [
+      "Increase marketing investment for Data category (highest ROI per student)",
+      "Expand Programming offerings (43.75% of enrollment, strong completion rates)",
+      "Review pricing and positioning for Marketing category"
+    ]
+  },
+  "audit_certification": {
+    "table_audited": "enrollments",
+    "execution_order": "Q1 → Q12 (Strictly Sequential)",
+    "tables_modified": 1,
+    "records_inserted": 1,
+    "records_updated": 2,
+    "records_deleted": 2,
+    "final_record_count": 16,
+    "data_integrity": "EXCELLENT",
+    "certification_status": "CERTIFIED_FOR_Q3_REPORTING"
+  }
+}
